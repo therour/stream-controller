@@ -1,4 +1,4 @@
-from functools import cache
+from functools import lru_cache
 
 class AppEvent:
     event = ""
@@ -7,7 +7,7 @@ class AppEvent:
 
 
 class EventsEmitter:
-    @cache
+    @lru_cache
     @staticmethod
     def instance():
         return EventsEmitter()
