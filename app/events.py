@@ -7,7 +7,7 @@ class AppEvent:
 
 
 class EventsEmitter:
-    @lru_cache
+    @lru_cache()
     @staticmethod
     def instance():
         return EventsEmitter()
