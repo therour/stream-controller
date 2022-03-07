@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 from app.camera.repository import CameraRepository
 from .schemas import CreateCamera, EditCamera
@@ -17,7 +18,7 @@ def get_all(camera_repository: CameraRepository = Depends(get_camera_repository)
 @router.post("/")
 def add(camera: CreateCamera, camera_repository: CameraRepository = Depends(get_camera_repository)):
     new_camera = camera_repository.add(camera)
-    return Response(status_code=201, content={
+    return JSONResponse(status_code=201, content={
         "data": new_camera,
     })
 
@@ -39,4 +40,4 @@ def edit(id: int, camera: EditCamera, camera_repository: CameraRepository = Depe
 @router.delete("/{id}")
 def delete(id: int, camera_repository: CameraRepository = Depends(get_camera_repository)):
     camera_repository.delete(id)
-    return Response(status_code=204)
+    return JSONResponse(status_code=204)
