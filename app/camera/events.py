@@ -1,6 +1,5 @@
 from app.events import AppEvent, events_on
 from app.streams.dependencies import add_stream, remove_stream, reset_stream
-from app.streams.streaming import StreamingThread
 from .model import Camera
 
 
