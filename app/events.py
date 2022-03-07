@@ -20,14 +20,14 @@ class EventsEmitter:
                 handler(event)
 
 
-    def listen(self, event: AppEvent, handler):
-        if self.handlers.get(event.get_event_name()) is None:
-            self.handlers[event] = []
-        self.handlers[event.name].append(handler)
+    def listen(self, event_name: str, handler):
+        if self.handlers.get(event_name) is None:
+            self.handlers[event_name] = []
+        self.handlers[event_name].append(handler)
 
 
-def events_on(event: AppEvent):
+def events_on(event_name: str):
     def decorator(func):
-        EventsEmitter.instance().listen(event, func)
+        EventsEmitter.instance().listen(event_name, func)
 
     return decorator
