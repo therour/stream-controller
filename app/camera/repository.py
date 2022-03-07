@@ -1,8 +1,9 @@
 from copy import copy
 from typing import List, Optional
-from app.camera.events import CameraCreated, CameraDeleted, CameraUpdated, EventsEmitter
+from app.camera.events import CameraCreated, CameraDeleted, CameraUpdated
 
 from app.camera.schemas import CreateCamera, EditCamera
+from app.events import EventsEmitter
 from .model import Camera
 
 
