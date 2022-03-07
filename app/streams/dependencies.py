@@ -6,7 +6,7 @@ from app.streams.streaming import StreamingThread
 streamings: Dict[str, StreamingThread] = dict()
 
 def add_stream(name: str, source: str):
-    thread = StreamingThread(source)
+    thread = StreamingThread(source, name)
     streamings.update({name: thread})
     thread.start()
 
