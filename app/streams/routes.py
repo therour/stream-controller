@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get('/')
 def show(fps: int = 15):
-    return streamings.keys()
+    return ", ".join(list(streamings.keys()))
 
 
 @router.get('/streams/{name}/stream')
