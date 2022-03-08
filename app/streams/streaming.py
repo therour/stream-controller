@@ -39,10 +39,10 @@ class StreamingThread(Thread):
 
                 success, frame = self.capture.read()
                 if not success:
-                    self.current_frame = np.zeros((240, 320, 3), np.uint8)
-                    time.sleep(1)
-                    self.current_frame = cv2.imencode('.png', frame)[1].tobytes()
                     self.status = "failing"
+                    time.sleep(1)
+                    frame = np.zeros((240, 320, 3), np.uint8)
+                    self.current_frame = cv2.imencode('.png', frame)[1].tobytes()
 
                 else:
                     self.status = "running"
