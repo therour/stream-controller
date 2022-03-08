@@ -20,14 +20,14 @@ class EventsEmitter:
 
     def emit(self, event: AppEvent):
         event_name = event.get_event_name()
-        log.info("New event:", event_name)
+        print("New event:", event_name)
         if self.handlers.get(event_name) is not None:
             for handler in self.handlers[event_name]:
                 handler(event)
 
 
     def on(self, event_name: str, handler):
-        log.info("Registering event handler:", event_name)
+        print("Registering event handler:", event_name)
         if self.handlers.get(event_name) is None:
             self.handlers[event_name] = []
         self.handlers[event_name].append(handler)
