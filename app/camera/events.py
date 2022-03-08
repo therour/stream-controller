@@ -19,7 +19,7 @@ class CameraDeleted(CameraEventPayload):
 
 def setup_event_listeners(events_emitter: EventsEmitter):
     def on_camera_created(event: CameraCreated):
-        stream_name = f"camera-${event.camera.id}"
+        stream_name = f"camera-{event.camera.id}"
         add_stream(
             name=stream_name,
             source=event.camera.source,
@@ -27,12 +27,12 @@ def setup_event_listeners(events_emitter: EventsEmitter):
 
 
     def on_camera_deleted(event: CameraDeleted):
-        remove_stream(name=f"camera-${event.camera.id}")
+        remove_stream(name=f"camera-{event.camera.id}")
 
 
     def on_camera_updated(event: CameraUpdated):
         reset_stream(
-            name=f"camera-${event.camera.id}",
+            name=f"camera-{event.camera.id}",
             source=event.camera.source,
         )
 
