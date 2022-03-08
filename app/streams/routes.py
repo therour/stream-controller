@@ -12,19 +12,7 @@ router = APIRouter()
 
 @router.get('/')
 def show(fps: int = 15):
-    html = f"""
-    <!DOCTYPE html>
-    <html>
-        <head><title>Streaming</title></head>
-        <body>
-            <img src="/streams/1?fps={fps}" />
-            <img src="/streams/2?fps={fps}" />
-            <img src="/streams/3?fps={fps}" />
-            <img src="/streams/4?fps={fps}" />
-        </body>
-    </html>
-    """
-    return HTMLResponse(content=html, status_code=200)
+    return streamings.keys()
 
 
 @router.get('/streams/{name}/stream')
