@@ -1,4 +1,5 @@
 from threading import Thread
+import numpy as np
 import time
 import cv2
 
@@ -11,18 +12,29 @@ class StreamingThread(Thread):
 
         self.capture = None  # type: cv2.VideoCapture
         self.current_frame = None
+        self.status = "ready"
 
         self.is_running = False
         self.should_stop = False
         self.should_flip = str(self.source).isnumeric()
         self.count_listener = 0
 
+    def reset(self):
+        self.status = "need_restart"
+
     def run(self):
         try:
             self.is_running = True
+            self.status = "starting"
             self.capture = cv2.VideoCapture(self.source)
-            while self.capture.isOpened():
+            while True:
                 time.sleep(0.02)
+
+                if self.status == "need_restart":
+                    self.status = "starting"
+                    self.capture = cv2.VideoCapture(self.source)
+                    time.sleep(3)
+
 
                 if self.should_stop:
                     self.should_stop = False
@@ -34,9 +46,13 @@ class StreamingThread(Thread):
 
                 success, frame = self.capture.read()
                 if not success:
-                    break
+                    self.current_frame = np.zeros((240, 320, 3), np.uint8)
+                    time.sleep(1)
+                    self.current_frame = cv2.imencode('.png', frame)[1].tobytes()
+                    self.status = "failing"
 
-                if success:
+                else:
+                    self.status = "running"
                     frame = image_resize(frame, width=320)
 
                     if self.should_flip:

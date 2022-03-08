@@ -16,11 +16,16 @@ def add_stream(name: str, source: str):
 
 def reset_stream(name: str, source: str):
     print("Resetting stream:", name, source)
-    thread = streamings.pop(name)
-    if thread.is_alive():
-        thread.stop()
+    thread = streamings.get(name)
 
-    add_stream(name, source)
+    thread.source = source
+
+    thread.reset()
+
+    # thread = streamings.pop(name)
+    # if thread.is_alive():
+    #     thread.stop()
+    # add_stream(name, source)
 
 
 def remove_stream(name: str):
