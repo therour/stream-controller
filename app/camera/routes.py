@@ -11,7 +11,7 @@ router = APIRouter(prefix="/camera");
 def get_all(camera_repository: CameraRepository = Depends(get_camera_repository)):
     cameras = camera_repository.get_all()
     return {
-        "data": cameras
+        "data": [camera.dict() for camera in cameras]
     }
 
 
@@ -19,7 +19,7 @@ def get_all(camera_repository: CameraRepository = Depends(get_camera_repository)
 def add(camera: CreateCamera, camera_repository: CameraRepository = Depends(get_camera_repository)):
     new_camera = camera_repository.add(camera)
     return JSONResponse(status_code=201, content={
-        "data": new_camera,
+        "data": new_camera.dict(),
     })
 
 
@@ -27,14 +27,14 @@ def add(camera: CreateCamera, camera_repository: CameraRepository = Depends(get_
 def get(id: int, camera_repository: CameraRepository = Depends(get_camera_repository)):
     camera = camera_repository.find(id)
     return {
-        "data": camera,
+        "data": camera.dict(),
     }
 
 
 @router.put("/{id}")
 def edit(id: int, camera: EditCamera, camera_repository: CameraRepository = Depends(get_camera_repository)):
     camera = camera_repository.edit(id, camera)
-    return {"data": camera}
+    return {"data": camera.dict()}
 
 
 @router.delete("/{id}")
