@@ -37,7 +37,7 @@ class StreamingThread(Thread):
                     break
 
                 if success:
-                    # frame = image_resize(frame, width=320)
+                    frame = image_resize(frame, width=320)
 
                     if self.should_flip:
                         frame = cv2.flip(frame, 1)
