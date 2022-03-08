@@ -16,7 +16,9 @@ class EventsEmitter:
     def instance():
         return EventsEmitter()
 
+
     handlers = {}
+
 
     def emit(self, event: AppEvent):
         event_name = event.get_event_name()
@@ -31,11 +33,3 @@ class EventsEmitter:
         if self.handlers.get(event_name) is None:
             self.handlers[event_name] = []
         self.handlers[event_name].append(handler)
-
-
-
-def events_on(event_name: str):
-    def decorator(func):
-        EventsEmitter.instance().on(event_name, func)
-
-    return decorator

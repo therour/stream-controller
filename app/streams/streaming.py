@@ -14,17 +14,14 @@ class StreamingThread(Thread):
         self.current_frame = None
         self.status = "ready"
 
-        self.is_running = False
         self.should_stop = False
         self.should_flip = str(self.source).isnumeric()
-        self.count_listener = 0
 
     def reset(self):
         self.status = "need_restart"
 
     def run(self):
         try:
-            self.is_running = True
             self.status = "starting"
             self.capture = cv2.VideoCapture(self.source)
             while True:
@@ -40,10 +37,6 @@ class StreamingThread(Thread):
                     self.should_stop = False
                     break
 
-                # if self.count_listener == 0:
-                #     time.sleep(1)
-                #     continue
-
                 success, frame = self.capture.read()
                 if not success:
                     self.current_frame = np.zeros((240, 320, 3), np.uint8)
@@ -58,54 +51,53 @@ class StreamingThread(Thread):
                     if self.should_flip:
                         frame = cv2.flip(frame, 1)
 
-                    ## Hard Processing
+                    ## Assume here for Hard Processing
                     
                     self.current_frame = cv2.imencode('.png', frame)[1].tobytes()
         finally:
-            self.is_running = False
             self.current_frame = None
             self.capture.release()
 
-    def stream_frame(self):
-        self.count_listener += 1
-        if not self.is_running:
-            self.start()
-            time.sleep(2)
 
-        print("stream_listener", self.count_listener)
+    def stream_frame(self):
         while self.current_frame:
-            time.sleep(0.02)
+            if self.status == "failing":
+                time.sleep(1)
+            else:
+                time.sleep(0.02)
+
             yield self.current_frame
 
+
     def stop_frame(self):
-        self.count_listener -= 1
-        print("stream_listener", self.count_listener)
+        pass
+
 
     def stop(self):
         self.should_stop = True
         return True
 
 
-class VideoWriterThread(Thread):
-    def __init__(self, frame_generator, filename):
-        Thread.__init__(self)
-        self.frame_generator = frame_generator
-        self.should_stop = False
+# class VideoWriterThread(Thread):
+#     def __init__(self, frame_generator, filename):
+#         Thread.__init__(self)
+#         self.frame_generator = frame_generator
+#         self.should_stop = False
 
-        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-        self.video_writer = cv2.VideoWriter(filename, fourcc, 30, (640, 480))
+#         fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+#         self.video_writer = cv2.VideoWriter(filename, fourcc, 30, (640, 480))
 
-    def run(self) -> None:
-        try:
-            for frame in self.frame_generator():
-                if self.should_stop: break
+#     def run(self) -> None:
+#         try:
+#             for frame in self.frame_generator():
+#                 if self.should_stop: break
 
-                self.video_writer.write(frame)
-        finally:
-            self.video_writer.release()
+#                 self.video_writer.write(frame)
+#         finally:
+#             self.video_writer.release()
     
-    def end(self):
-        self.should_stop = True
+#     def end(self):
+#         self.should_stop = True
 
 
 
