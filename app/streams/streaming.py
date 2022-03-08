@@ -28,9 +28,9 @@ class StreamingThread(Thread):
                     self.should_stop = False
                     break
 
-                if self.count_listener == 0:
-                    time.sleep(1)
-                    continue
+                # if self.count_listener == 0:
+                #     time.sleep(1)
+                #     continue
 
                 success, frame = self.capture.read()
                 if not success:
