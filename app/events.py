@@ -1,4 +1,8 @@
 from functools import lru_cache
+import logging
+
+
+log = logging.getLogger(__name__)
 
 class AppEvent:
     event = ""
@@ -15,19 +19,23 @@ class EventsEmitter:
     handlers = {}
 
     def emit(self, event: AppEvent):
-        if self.handlers.get(event.get_event_name()) is not None:
-            for handler in self.handlers[event.get_event_name()]:
+        event_name = event.get_event_name()
+        log.info("New event:", event_name)
+        if self.handlers.get(event_name) is not None:
+            for handler in self.handlers[event_name]:
                 handler(event)
 
 
-    def listen(self, event_name: str, handler):
+    def on(self, event_name: str, handler):
+        log.info("Registering event handler:", event_name)
         if self.handlers.get(event_name) is None:
             self.handlers[event_name] = []
         self.handlers[event_name].append(handler)
 
 
+
 def events_on(event_name: str):
     def decorator(func):
-        EventsEmitter.instance().listen(event_name, func)
+        EventsEmitter.instance().on(event_name, func)
 
     return decorator
