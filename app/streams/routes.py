@@ -46,4 +46,4 @@ def stream_generator(stream: StreamingThread, fps: int):
     for frame in stream.stream_frame():
             time.sleep(fps_sleep)
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/png\r\n\r\n' + frame + b'\r\n')

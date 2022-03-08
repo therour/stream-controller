@@ -44,7 +44,7 @@ class StreamingThread(Thread):
 
                     ## Hard Processing
                     
-                    self.current_frame = cv2.imencode('.jpg', frame)[1].tobytes()
+                    self.current_frame = cv2.imencode('.png', frame)[1].tobytes()
         finally:
             self.is_running = False
             self.current_frame = None
